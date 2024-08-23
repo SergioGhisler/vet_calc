@@ -1,5 +1,42 @@
 import streamlit as st
+import stripe
+import stripe
 
+
+def make_charge(amount_pounds):
+    try:
+        # Create a charge
+        charge = stripe.Charge.create(
+            amount=int(amount_pounds * 100),  # Convert pounds to pence
+            currency='gbp',
+            source='tok_visa',  # Replace with a valid payment source token from your front-end
+            description=f'Charge for {amount_pounds} pounds',
+        )
+        return f"Charge successful: {charge['id']}"
+
+    except stripe.error.CardError as e:
+        body = e.json_body
+        err = body.get('error', {})
+        return f"Card error: {err.get('message')}"
+
+    except stripe.error.RateLimitError:
+        return "Rate limit error"
+
+    except stripe.error.InvalidRequestError:
+        return "Invalid request error"
+
+    except stripe.error.AuthenticationError:
+        return "Authentication error"
+
+    except stripe.error.APIConnectionError:
+        return "Network error"
+
+    except stripe.error.StripeError:
+        return "Stripe error"
+
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+    
 drug_doses = {
     "Quick search": {"concentrations": [None], "min_dose": None, "max_dose": None},
     "Butorphanol": {"concentrations": [10], "min_dose": 0.1, "max_dose": 0.4},
@@ -17,7 +54,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
 st.title("Vet Calc :dog:")
+
+st.link_button('Go premium', 'https://buy.stripe.com/test_28og328IL9fm4lG7ss')
+
 
 st.selectbox("Select formula", ["CRI", "test2", "test3"])
 
