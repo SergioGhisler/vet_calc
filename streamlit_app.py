@@ -57,7 +57,7 @@ st.markdown(
 
 st.title("Vet Calc :dog:")
 
-st.link_button('Go premium', 'https://buy.stripe.com/test_28og328IL9fm4lG7ss')
+# st.link_button('Go premium', 'https://buy.stripe.com/test_28og328IL9fm4lG7ss')
 
 
 st.selectbox("Select formula", ["CRI", "test2", "test3"])
